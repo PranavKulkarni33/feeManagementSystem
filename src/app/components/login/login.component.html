@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="login-form-wrapper">
+        <div class="login-card">
+            <div class="login-card-body">
+                <form>
+                    <div class="form-group">
+                        <h4 class="form-title">Login</h4>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" name="email" [(ngModel)]="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-input" name="password" [(ngModel)]="password">
+                    </div>
+                    <button type="button" class="button-primary" (click)="login()">Login</button>
+                    <!-- <button type="button" class="button-secondary" (click)="goBack()">Back</button> -->
+                    <div class="link-wrapper">
+                        <a href="/signup" class="link">Need Account? <span class="link-highlight">Sign Up</span></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

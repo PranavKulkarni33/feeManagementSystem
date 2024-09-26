@@ -1,0 +1,90 @@
+/* Centering Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f9;
+   
+}
+
+/* Login Form Wrapper */
+.login-form-wrapper {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Card Styling */
+.login-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+/* Card Body */
+.login-card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-title {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.button-primary {
+    background-color: #17a2b8;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.button-secondary {
+    background-color: transparent;
+    color: #dc3545;
+    padding: 10px 15px;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Link Styling */
+.link-wrapper {
+    margin-top: 10px;
+}
+
+.link {
+    text-decoration: none;
+    color: #555;
+}
+
+.link-highlight {
+    color: #dc3545;
+}

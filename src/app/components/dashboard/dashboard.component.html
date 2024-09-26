@@ -1,0 +1,212 @@
+<div class="container">
+    <div class="student-table-wrapper">
+        <div class="student-card">
+            <div class="student-card-body">
+                <div class="filter-group1">
+                    <label for="statusFilter">Filter by Enrollment Status:</label>
+                    <select id="statusFilter" [(ngModel)]="selectedFilterStatus" (change)="onStatusFilterChange()" class="form-input1">
+                        <option *ngFor="let status of enrollmentStatusesForFilter" [value]="status">{{ status | titlecase }}</option>
+                    </select>
+                </div>
+                <div class="header">
+                    <h5 class="title">Student Database</h5>
+                </div>
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Student ID</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Program</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total Fees</th>
+                            <th>Fee Balance</th>
+                            <th>Installments</th>
+                            <th>Notes</th> <!-- New column for the Installment button -->
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of filteredStudentList; let i = index">
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.studentID }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.enrollmentStatus }}</td>
+                            <td>{{ student.program }}</td>
+                            <td>{{ student.startDate }}</td>
+                            <td>{{ student.endDate }}</td>
+                            <td>{{ student.totalFees }}</td>
+                            <td>{{ student.totalFeeBalance }}</td>
+                            <td>
+                                <button class="view-installments-button" (click)="openInstallmentModalForStudent(student)">View Installments</button> <!-- New button -->
+                            </td>
+                            <td>{{ student.notes }}</td>
+                            <td>
+                                <button class="delete-button3" (click)="deleteStudent(student)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="back-button1" (click)="back()">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <div class="form-card">
+            <div class="form-header">
+                <h5 class="title2">Add Student</h5>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" [(ngModel)]="studentObj.name" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="studentID">Student ID</label>
+                    <input type="text" id="studentID" name="studentID" [(ngModel)]="studentObj.studentID" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="enrollmentStatus">Enrollment Status</label>
+                    <select id="enrollmentStatus" [(ngModel)]="studentObj.enrollmentStatus" name="enrollmentStatus" class="form-input" required>
+                        <option *ngFor="let status of enrollmentStatuses" [value]="status">
+                            {{ status | titlecase }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" [(ngModel)]="studentObj.email" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="program">Program</label>
+                    <input type="text" id="program" name="program" [(ngModel)]="studentObj.program" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date (YYYY-MM-DD)</label>
+                    <input type="date" id="startDate" name="startDate" [(ngModel)]="studentObj.startDate" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date (YYYY-MM-DD)</label>
+                    <input type="date" id="endDate" name="endDate" [(ngModel)]="studentObj.endDate" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="totalFees">Total Fees</label>
+                    <input type="text" id="totalFees" name="totalFees" [(ngModel)]="studentObj.totalFees" class="form-input">
+                </div>
+                
+                <!-- Trigger for Modal -->
+                <div class="form-group">
+                    <label for="datesOfFeesToBePaid">Dates and Installments</label>
+                    <button type="button" (click)="openInstallmentModal()" class="add-button">Add Installments</button>
+                </div>
+                <div class="form-group">
+                    <label for="Notes">Notes</label>
+                    <input type="text" id="Notes" name="Notes" [(ngModel)]="studentObj.notes" class="form-input">
+                </div>
+                <button type="button" class="add-button1" (click)="addStudent()">Add Student</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Installment Details Modal -->
+<div id="installmentDetailsModal" class="modal" [ngClass]="{'show': showInstallmentDetailsModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Installment Details for {{ selectedStudent?.name }}</h5>
+            <button type="button" class="close" (click)="closeInstallmentDetailsModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <table class="installment-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Date Received</th>
+                        <th>Amount Received</th>
+                        <th>Payment Mode</th> <!-- New column for payment mode -->
+                        <th>Note</th> <!-- New column for note -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let installment of selectedInstallments">
+                        <td>{{ installment.date }}</td>
+                        <td>{{ installment.amount }}</td>
+                        <td>{{ installment.dateReceived || 'Not Received' }}</td>
+                        <td>{{ installment.amountReceived || 'Not Received' }}</td>
+                        <td>{{ installment.paymentMode }}</td> <!-- Display payment mode -->
+                        <td>{{ installment.note || 'No Note' }}</td> <!-- Display notes -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" (click)="closeInstallmentDetailsModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Installment Modal -->
+<div id="installmentModal" class="modal" [ngClass]="{'show': showModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Add Installment Dates and Amounts</h5>
+            <button type="button" class="close" (click)="closeInstallmentModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <table class="installment-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Date Received</th>
+                        <th>Amount Received</th>
+                        <th>Payment Mode</th> <!-- New column for payment mode -->
+                        <th>Note</th> <!-- New column for note -->
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let installment of installmentList; let i = index">
+                        <td>
+                            <input type="date" [(ngModel)]="installment.date" class="form-input">
+                        </td>
+                        <td>
+                            <input type="text" [(ngModel)]="installment.amount" class="form-input">
+                        </td>
+                        <td>
+                            <input type="date" [(ngModel)]="installment.dateReceived" class="form-input">
+                        </td>
+                        <td>
+                            <input type="text" [(ngModel)]="installment.amountReceived" class="form-input">
+                        </td>
+                        <td>
+                            <select [(ngModel)]="installment.paymentMode" class="form-input">
+                                <option value="ET">ET</option>
+                                <option value="Credit">Credit</option>
+                                <option value="Cash">Cash</option>
+                                <option value="OSAP">OSAP</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" [(ngModel)]="installment.note" class="form-input"> <!-- Input for note -->
+                        </td>
+                        <td>
+                            <button type="button" class="remove-button" (click)="removeInstallment(i)">Remove</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" (click)="addInstallment()" class="add-button">Add Installment</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="save-button" (click)="saveInstallments()">Save</button>
+        </div>
+    </div>
+</div>
+
