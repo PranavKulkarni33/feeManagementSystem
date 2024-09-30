@@ -38,6 +38,7 @@
     margin-bottom: 20px;
     color: #fff;
     text-align: center;
+    padding-left: 500px;
 }
 
 .title2 {
@@ -402,3 +403,109 @@
     outline: none; /* Removes default outline */
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow when focused */
 }
+
+/* Container styling */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f9;
+    width: 100%;
+}
+
+/* Header with filter button */
+.header-with-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* Filters button */
+.filter-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+    background-color: #0056b3;
+}
+
+/* Filter option buttons in modal */
+.filter-option-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.filter-option-button:hover {
+    background-color: #218838;
+}
+
+/* Modal styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal.show {
+    display: block; /* Show when needed */
+}
+
+/* Form input styling for filter selectors */
+.form-input1 {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Filter Apply Button */
+.filter-apply-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.filter-apply-button:hover {
+    background-color: #0056b3;
+}
+
+/* Date range filter modal styling */
+#dateRangeFilterModal .modal-content {
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+}
+

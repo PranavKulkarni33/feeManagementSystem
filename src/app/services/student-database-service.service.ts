@@ -58,6 +58,11 @@ export class StudentDatabaseServiceService {
 
   // Updates the installments of a student in Firestore
   updateInstallment(student: StudentDatabase) {
+    if (!student.id) {
+        console.error('Error: Student ID is missing.');
+        return Promise.reject('Student ID is missing.');
+    }
+
     return this.afs
       .doc('StudentDatabase/' + student.id)
       .update({
@@ -75,5 +80,6 @@ export class StudentDatabaseServiceService {
         console.error('Error updating installments: ', error);
         throw error;
       });
-  }
+}
+
 }
