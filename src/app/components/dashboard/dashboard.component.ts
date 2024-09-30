@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
   startDateFilter: string = '';
   endDateFilter: string = '';
   showDateRangeFilterModal: boolean = false;
+  appliedFilter: { type: string, value?: any } | null = null;
 
   // Including paymentMode and note for each installment
   installmentList: { 
@@ -365,24 +366,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  applyDateRangeFilter() {
-    if (!this.startDateFilter || !this.endDateFilter) {
-        // If either date is not set, reset the filtered list
-        this.filteredStudentList = [...this.studentList];
-    } else {
-        const startDate = new Date(this.startDateFilter);
-        const endDate = new Date(this.endDateFilter);
-
-        this.filteredStudentList = this.studentList.filter(student => {
-            // Check if any of the installment dates fall within the specified range
-            return Object.keys(student.datesOfFeesToBePaid).some(dateStr => {
-                const installmentDate = new Date(dateStr);
-                return installmentDate >= startDate && installmentDate <= endDate;
-            });
-        });
-    }
-    this.closeDateRangeFilterModal();
-  }
+  
 
   // Methods to handle filter modals
   openFilterModal() {
@@ -413,16 +397,50 @@ export class DashboardComponent implements OnInit {
 
   // Apply status filter
   applyStatusFilter() {
-      this.closeStatusFilterModal();
-      this.filterStudentsByStatus();
-      this.installmentDueDateFilter = ''; // Reset due date filter
+    this.filteredStudentList = this.selectedFilterStatus === 'all'
+        ? [...this.studentList]
+        : this.studentList.filter(student => student.enrollmentStatus === this.selectedFilterStatus);
+
+    this.appliedFilter = { type: 'status', value: this.selectedFilterStatus };
+    this.closeStatusFilterModal();
   }
 
   // Apply due date filter
   applyDueDateFilter() {
-      this.closeDueDateFilterModal();
-      this.filterByInstallmentDueDate();
-      this.selectedFilterStatus = 'all'; // Reset status filter
+    if (!this.installmentDueDateFilter) {
+        this.filteredStudentList = [...this.studentList];
+    } else {
+        const selectedDate = new Date(this.installmentDueDateFilter);
+        this.filteredStudentList = this.studentList.filter(student => {
+            return Object.keys(student.datesOfFeesToBePaid).some(dateStr => {
+                const installmentDate = new Date(dateStr);
+                return installmentDate.getTime() === selectedDate.getTime();
+            });
+        });
+    }
+
+    this.appliedFilter = { type: 'dueDate', value: this.installmentDueDateFilter };
+    this.closeDueDateFilterModal();
+  }
+
+  // Apply date range filter
+  applyDateRangeFilter() {
+    if (!this.startDateFilter || !this.endDateFilter) {
+        this.filteredStudentList = [...this.studentList];
+    } else {
+        const startDate = new Date(this.startDateFilter);
+        const endDate = new Date(this.endDateFilter);
+
+        this.filteredStudentList = this.studentList.filter(student => {
+            return Object.keys(student.datesOfFeesToBePaid).some(dateStr => {
+                const installmentDate = new Date(dateStr);
+                return installmentDate >= startDate && installmentDate <= endDate;
+            });
+        });
+    }
+
+    this.appliedFilter = { type: 'dateRange', value: { start: this.startDateFilter, end: this.endDateFilter } };
+    this.closeDateRangeFilterModal();
   }
 
   openDateRangeFilterModal() {
@@ -433,6 +451,7 @@ export class DashboardComponent implements OnInit {
   closeDateRangeFilterModal() {
       this.showDateRangeFilterModal = false;
   }
+  
 
   back() {
     this.router.navigate(['/login']);

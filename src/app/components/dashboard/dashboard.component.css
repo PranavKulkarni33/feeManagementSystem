@@ -482,6 +482,8 @@
     border-radius: 4px;
     margin-top: 10px;
     font-size: 16px;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #000; /* Black text */
 }
 
 /* Filter Apply Button */
@@ -508,4 +510,37 @@
     max-width: 400px;
     padding: 20px;
 }
+
+/* Applied filter container */
+.applied-filter-container {
+    background-color: #f4f4f9;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Applied filter styling */
+.applied-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.applied-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #000; /* Black text */
+}
+
+.form-input1 {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #000; /* Black text */
+}
+
 
