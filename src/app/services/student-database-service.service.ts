@@ -41,4 +41,39 @@ export class StudentDatabaseServiceService {
         throw error;
       });
   }
+
+  // Updates an existing student in Firestore
+  updateStudent(student: StudentDatabase) {
+    return this.afs
+      .doc('StudentDatabase/' + student.id)
+      .update(student)
+      .then(() => {
+        console.log('Student updated successfully!');
+      })
+      .catch(error => {
+        console.error('Error updating student: ', error);
+        throw error;
+      });
+  }
+
+  // Updates the installments of a student in Firestore
+  updateInstallment(student: StudentDatabase) {
+    return this.afs
+      .doc('StudentDatabase/' + student.id)
+      .update({
+        datesOfFeesToBePaid: student.datesOfFeesToBePaid,
+        dateOfPaymentReceived: student.dateOfPaymentReceived,
+        amountReceived: student.amountReceived,
+        paymentModes: student.paymentModes,
+        installmentNotes: student.installmentNotes,
+        totalFeeBalance: student.totalFeeBalance // Update the balance as well
+      })
+      .then(() => {
+        console.log('Installments updated successfully!');
+      })
+      .catch(error => {
+        console.error('Error updating installments: ', error);
+        throw error;
+      });
+  }
 }

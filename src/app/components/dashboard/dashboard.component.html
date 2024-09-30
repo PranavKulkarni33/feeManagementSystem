@@ -23,32 +23,74 @@
                             <th>End Date</th>
                             <th>Total Fees</th>
                             <th>Fee Balance</th>
+                            <th>Notes</th>
                             <th>Installments</th>
-                            <th>Notes</th> <!-- New column for the Installment button -->
+                            <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let student of filteredStudentList; let i = index">
-                            <td>{{ student.name }}</td>
-                            <td>{{ student.studentID }}</td>
-                            <td>{{ student.email }}</td>
-                            <td>{{ student.enrollmentStatus }}</td>
-                            <td>{{ student.program }}</td>
-                            <td>{{ student.startDate }}</td>
-                            <td>{{ student.endDate }}</td>
-                            <td>{{ student.totalFees }}</td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.name }}</span>
+                                <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.name">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.studentID }}</span>
+                                <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.studentID">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.email }}</span>
+                                <input *ngIf="student.editing" type="email" class="edit-input" [(ngModel)]="student.email">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.enrollmentStatus }}</span>
+                                <select *ngIf="student.editing" class="edit-select" [(ngModel)]="student.enrollmentStatus">
+                                    <option value="enrolled">Enrolled</option>
+                                    <option value="graduated">Graduated</option>
+                                    <option value="withdrawn">Withdrawn</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.program }}</span>
+                                <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.program">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.startDate | date: 'yyyy-MM-dd' }}</span>
+                                <input *ngIf="student.editing" type="date" class="edit-input" [(ngModel)]="student.startDate">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.endDate | date: 'yyyy-MM-dd' }}</span>
+                                <input *ngIf="student.editing" type="date" class="edit-input" [(ngModel)]="student.endDate">
+                            </td>
+                            <td>
+                                <span *ngIf="!student.editing">{{ student.totalFees }}</span>
+                                <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.totalFees">
+                            </td>
                             <td>{{ student.totalFeeBalance }}</td>
                             <td>
-                                <button class="view-installments-button" (click)="openInstallmentModalForStudent(student)">View Installments</button> <!-- New button -->
+                                <span *ngIf="!student.editing">{{ student.notes }}</span>
+                                <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.notes">
                             </td>
-                            <td>{{ student.notes }}</td>
+                            <td>
+                                <button class="view-installments-button" (click)="openInstallmentModalForStudent(student)">View Installments</button>
+                            </td>
+                            <td>
+                                <button *ngIf="!student.editing" class="edit-button" (click)="editStudent(student)">
+                                    Edit
+                                </button>
+                                <button *ngIf="student.editing" class="save-button" (click)="updateStudent(student, i)">
+                                    Save
+                                </button>
+                            </td>
                             <td>
                                 <button class="delete-button3" (click)="deleteStudent(student)">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                
                 <button class="back-button1" (click)="back()">Back</button>
             </div>
         </div>
@@ -128,18 +170,58 @@
                         <th>Date Received</th>
                         <th>Amount Received</th>
                         <th>Payment Mode</th> <!-- New column for payment mode -->
-                        <th>Note</th> <!-- New column for note -->
+                        <th>Note</th>
+                        <th>Edit</th> <!-- New column for note -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let installment of selectedInstallments">
-                        <td>{{ installment.date }}</td>
-                        <td>{{ installment.amount }}</td>
-                        <td>{{ installment.dateReceived || 'Not Received' }}</td>
-                        <td>{{ installment.amountReceived || 'Not Received' }}</td>
-                        <td>{{ installment.paymentMode }}</td> <!-- Display payment mode -->
-                        <td>{{ installment.note || 'No Note' }}</td> <!-- Display notes -->
+                    <tr *ngFor="let installment of selectedInstallments; let i = index">
+                        <td *ngIf="!installment.editing">{{ installment.date }}</td>
+                        <td *ngIf="installment.editing">
+                            <input [(ngModel)]="installment.date" placeholder="Date" />
+                        </td>
+                    
+                        <td *ngIf="!installment.editing">{{ installment.amount }}</td>
+                        <td *ngIf="installment.editing">
+                            <input [(ngModel)]="installment.amount" placeholder="Amount" />
+                        </td>
+                    
+                        <td *ngIf="!installment.editing">{{ installment.dateReceived || 'Not Received' }}</td>
+                        <td *ngIf="installment.editing">
+                            <input [(ngModel)]="installment.dateReceived" placeholder="Date Received" />
+                        </td>
+                    
+                        <td *ngIf="!installment.editing">{{ installment.amountReceived || 'Not Received' }}</td>
+                        <td *ngIf="installment.editing">
+                            <input [(ngModel)]="installment.amountReceived" placeholder="Amount Received" />
+                        </td>
+                    
+                        <td *ngIf="!installment.editing">{{ installment.paymentMode }}</td>
+                        <td *ngIf="installment.editing">
+                            <select [(ngModel)]="installment.paymentMode">
+                                <option value="ET">ET</option>
+                                <option value="Credit">Credit</option>
+                                <option value="Cash">Cash</option>
+                                <option value="OSAP">OSAP</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </td>
+                    
+                        <td *ngIf="!installment.editing">{{ installment.note || 'No Note' }}</td>
+                        <td *ngIf="installment.editing">
+                            <input [(ngModel)]="installment.note" placeholder="Note" />
+                        </td>
+                    
+                        <td>
+                            <button (click)="editInstallment( i)">
+                                {{ installment.editing ? 'Cancel' : 'Edit' }}
+                            </button>
+                            <button *ngIf="installment.editing" (click)="updateInstallment(installment, i)">
+                                Save
+                            </button>
+                        </td>
                     </tr>
+                    
                 </tbody>
             </table>
         </div>

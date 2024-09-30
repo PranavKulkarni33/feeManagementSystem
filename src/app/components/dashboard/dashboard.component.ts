@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
   filteredStudentList: StudentDatabase[] = [];
   showModal: boolean = false;
   showInstallmentDetailsModal: boolean = false; // New variable for the details modal
+  currentEditingIndex: number | null = null;
 
   // Including paymentMode and note for each installment
   installmentList: { 
@@ -47,7 +48,8 @@ export class DashboardComponent implements OnInit {
     dateReceived: string, 
     amountReceived: string,
     paymentMode: string,
-    note: string
+    note: string,
+    
   }[] = [];
   
   selectedInstallments: { 
@@ -56,7 +58,8 @@ export class DashboardComponent implements OnInit {
     dateReceived: string, 
     amountReceived: string,
     paymentMode: string,
-    note: string
+    note: string,
+    editing: boolean
   }[] = [];
 
   selectedStudent: StudentDatabase | null = null; // Selected student for modal
@@ -184,7 +187,8 @@ export class DashboardComponent implements OnInit {
             dateReceived: student.dateOfPaymentReceived?.[index] || 'Not Received',
             amountReceived: student.amountReceived?.[index] || 'Not Received',
             paymentMode: student.paymentModes?.[index] || 'ET', // Default to ET if not available
-            note: student.installmentNotes?.[index] || '' // Default to empty string if no note
+            note: student.installmentNotes?.[index] || '', // Default to empty string if no note
+            editing: false
         };
     });
 
@@ -241,6 +245,82 @@ export class DashboardComponent implements OnInit {
 
     this.closeInstallmentModal();
   }
+
+  editStudent(student: StudentDatabase) {
+    student.editing = true; // Allows fields to be edited
+  }
+
+  updateStudent(updatedStudent: StudentDatabase, index: number) {
+    const originalStudent = this.studentList[index];
+
+    // Check if there are any changes
+    if (updatedStudent.name !== originalStudent.name ||
+        updatedStudent.email !== originalStudent.email ||
+        updatedStudent.totalFees !== originalStudent.totalFeeBalance ||
+        updatedStudent.startDate !== originalStudent.startDate ||
+        updatedStudent.endDate !== originalStudent.endDate ||
+        updatedStudent.enrollmentStatus !== originalStudent.enrollmentStatus ||
+        updatedStudent.program !== originalStudent.program) {
+      
+      updatedStudent.editing = false; // Turn off editing mode
+
+      // Call the update service method to update the database
+      this.studentService.updateStudent(updatedStudent).then(() => {
+        this.studentList[index] = { ...updatedStudent }; // Update the UI after successful save
+        console.log('Student updated successfully');
+      }).catch((error) => {
+        console.error('Error updating student: ', error);
+      });
+    } else {
+      updatedStudent.editing = false; // No changes, just exit edit mode
+    }
+  }
+
+  editInstallment(index: number) {
+    this.currentEditingIndex = index; // Set the current editing index
+}
+
+updateInstallment(updatedInstallment: any, index: number) {
+  // Check if there are any changes
+  const originalInstallment = this.installmentList[index];
+
+  if (
+      updatedInstallment.date !== originalInstallment.date ||
+      updatedInstallment.amount !== originalInstallment.amount ||
+      updatedInstallment.dateReceived !== originalInstallment.dateReceived ||
+      updatedInstallment.amountReceived !== originalInstallment.amountReceived ||
+      updatedInstallment.paymentMode !== originalInstallment.paymentMode ||
+      updatedInstallment.note !== originalInstallment.note
+  ) {
+      // Turn off editing mode for the installment
+      updatedInstallment.editing = false;
+
+      // Update the student object with the new installment details
+      this.studentObj.datesOfFeesToBePaid[updatedInstallment.date] = updatedInstallment.amount;
+
+      // Update the received date and amount in the respective arrays
+      this.studentObj.dateOfPaymentReceived[index] = updatedInstallment.dateReceived;
+      this.studentObj.amountReceived[index] = updatedInstallment.amountReceived;
+      this.studentObj.paymentModes[index] = updatedInstallment.paymentMode;
+      this.studentObj.installmentNotes[index] = updatedInstallment.note;
+
+      // Call the service method to update the student in the database
+      this.studentService.updateStudent(this.studentObj).then(() => {
+          // Update the installment list with the new details
+          this.installmentList[index] = { ...updatedInstallment }; 
+          console.log('Installment updated successfully');
+      }).catch((error) => {
+          console.error('Error updating installment: ', error);
+      });
+  } else {
+      // No changes, just exit edit mode
+      updatedInstallment.editing = false; 
+  }
+}
+
+
+
+
 
   back() {
     this.router.navigate(['/login']);
