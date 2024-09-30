@@ -18,5 +18,6 @@ export interface StudentDatabase {
     totalFeeBalance: string; // Total remaining balance
     enrollmentStatus: string; // New field for enrollment status
     notes: string; // Notes for student
+    editing?: boolean;
 }
 

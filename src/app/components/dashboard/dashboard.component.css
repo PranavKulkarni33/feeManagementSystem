@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    
     background-color: #f4f4f9;
     width: 100%;
 }
@@ -11,7 +11,7 @@
 /* Student Table Wrapper */
 .student-table-wrapper {
     width: 100%;
-    max-width: 1200px; /* Increased the width for better alignment */
+    max-width: 1400px; /* Increased the width for better alignment */
     margin-bottom: 30px;
     overflow-x: auto; /* Ensures horizontal scrolling if content overflows */
 }
@@ -58,7 +58,7 @@
 .student-table th,
 .student-table td {
     padding: 10px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
     color: white;
     word-wrap: break-word; /* Allows long text to wrap within the cell */
@@ -67,7 +67,7 @@
 .student-table th {
     background-color: #444;
     color: white;
-    font-weight: bold;
+    font-weight: bold; 
 }
 
 .student-table td {
@@ -331,4 +331,74 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+}
+
+/* Green Edit button */
+.edit-button {
+    background-color: #28a745; /* Green background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.edit-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Blue Save button */
+.save-button {
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.save-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.edit-input {
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 10px; /* Adds spacing inside the input box */
+    border: 1px solid #ccc; /* Light border for the input */
+    border-radius: 4px; /* Slightly rounded corners */
+    width: 100%; /* Ensures input takes full width of the table cell */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    font-size: 16px; /* Ensures readable font size */
+    color: #333; /* Dark text color for better readability */
+}
+
+.edit-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Removes the default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adds subtle shadow when focused */
+}
+
+.edit-select {
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 10px; /* Adds spacing inside the select box */
+    border: 1px solid #ccc; /* Light border for the select */
+    border-radius: 4px; /* Slightly rounded corners */
+    width: 100%; /* Ensures select takes full width of the table cell */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    font-size: 16px; /* Ensures readable font size */
+    color: #333; /* Dark text color for better readability */
+    appearance: none; /* Removes the default arrow for a custom look */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="#333" d="M2 0L0 2h4z"/></svg>'); /* Custom dropdown arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions custom arrow */
+    background-size: 10px; /* Size of custom arrow */
+}
+
+.edit-select:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Removes default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow when focused */
 }
