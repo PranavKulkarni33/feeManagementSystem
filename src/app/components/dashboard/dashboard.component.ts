@@ -236,15 +236,12 @@ export class DashboardComponent implements OnInit {
     this.studentObj.paymentModes = this.installmentList.map(installment => installment.paymentMode); // Save payment modes
     this.studentObj.installmentNotes = this.installmentList.map(installment => installment.note); // Save notes
 
-    // Calculate the total amount received and the remaining fee balance
-    const totalAmountReceived = this.studentObj.amountReceived.reduce((total, amount) => total + parseFloat(amount || '0'), 0);
-    const totalFees = parseFloat(this.studentObj.totalFees || '0');
-
-    // Calculate and save the fee balance
-    this.studentObj.totalFeeBalance = (totalFees - totalAmountReceived).toString();
+    // Calculate and update the total fee balance
+    this.studentObj.totalFeeBalance = this.calculateFeeBalance(this.studentObj);
 
     this.closeInstallmentModal();
-  }
+}
+
 
   editStudent(student: StudentDatabase) {
     student.editing = true; // Allows fields to be edited
@@ -261,66 +258,86 @@ export class DashboardComponent implements OnInit {
         updatedStudent.endDate !== originalStudent.endDate ||
         updatedStudent.enrollmentStatus !== originalStudent.enrollmentStatus ||
         updatedStudent.program !== originalStudent.program) {
-      
-      updatedStudent.editing = false; // Turn off editing mode
+        
+        // Calculate and update the total fee balance
+        updatedStudent.totalFeeBalance = this.calculateFeeBalance(updatedStudent);
 
-      // Call the update service method to update the database
-      this.studentService.updateStudent(updatedStudent).then(() => {
-        this.studentList[index] = { ...updatedStudent }; // Update the UI after successful save
-        console.log('Student updated successfully');
-      }).catch((error) => {
-        console.error('Error updating student: ', error);
-      });
+        updatedStudent.editing = false; // Turn off editing mode
+
+        // Call the update service method to update the database
+        this.studentService.updateStudent(updatedStudent).then(() => {
+            this.studentList[index] = { ...updatedStudent }; // Update the UI after successful save
+            console.log('Student updated successfully');
+        }).catch((error) => {
+            console.error('Error updating student:', error);
+        });
     } else {
-      updatedStudent.editing = false; // No changes, just exit edit mode
+        updatedStudent.editing = false; // No changes, just exit edit mode
     }
   }
 
-  editInstallment(index: number) {
-    this.currentEditingIndex = index; // Set the current editing index
-}
 
-updateInstallment(updatedInstallment: any, index: number) {
-  // Check if there are any changes
-  const originalInstallment = this.installmentList[index];
-
-  if (
-      updatedInstallment.date !== originalInstallment.date ||
-      updatedInstallment.amount !== originalInstallment.amount ||
-      updatedInstallment.dateReceived !== originalInstallment.dateReceived ||
-      updatedInstallment.amountReceived !== originalInstallment.amountReceived ||
-      updatedInstallment.paymentMode !== originalInstallment.paymentMode ||
-      updatedInstallment.note !== originalInstallment.note
-  ) {
-      // Turn off editing mode for the installment
-      updatedInstallment.editing = false;
-
-      // Update the student object with the new installment details
-      this.studentObj.datesOfFeesToBePaid[updatedInstallment.date] = updatedInstallment.amount;
-
-      // Update the received date and amount in the respective arrays
-      this.studentObj.dateOfPaymentReceived[index] = updatedInstallment.dateReceived;
-      this.studentObj.amountReceived[index] = updatedInstallment.amountReceived;
-      this.studentObj.paymentModes[index] = updatedInstallment.paymentMode;
-      this.studentObj.installmentNotes[index] = updatedInstallment.note;
-
-      // Call the service method to update the student in the database
-      this.studentService.updateStudent(this.studentObj).then(() => {
-          // Update the installment list with the new details
-          this.installmentList[index] = { ...updatedInstallment }; 
-          console.log('Installment updated successfully');
-      }).catch((error) => {
-          console.error('Error updating installment: ', error);
-      });
-  } else {
-      // No changes, just exit edit mode
-      updatedInstallment.editing = false; 
+  // Toggle editing mode for an installment
+  toggleEditInstallment(installment: any) {
+    installment.editing = !installment.editing;
   }
-}
+
+  editInstallment(installment: any) {
+    // Enable editing mode for the specific installment
+    installment.editing = true;
+  }
 
 
+  // Update the installment details and save to the database
+  updateInstallment(updatedInstallment: any, index: number) {
+    // Ensure selectedStudent is not null before proceeding
+    if (this.selectedStudent) {
+        // Update the student object with the new installment details
+        this.selectedStudent.datesOfFeesToBePaid[updatedInstallment.date] = updatedInstallment.amount;
+        this.selectedStudent.dateOfPaymentReceived[index] = updatedInstallment.dateReceived;
+        this.selectedStudent.amountReceived[index] = updatedInstallment.amountReceived;
+        this.selectedStudent.paymentModes[index] = updatedInstallment.paymentMode;
+        this.selectedStudent.installmentNotes[index] = updatedInstallment.note;
+
+        // Calculate and update the total fee balance
+        this.selectedStudent.totalFeeBalance = this.calculateFeeBalance(this.selectedStudent);
+
+        // Call the service method to update the student in the database
+        this.studentService.updateInstallment(this.selectedStudent).then(() => {
+            // Update the installment list with the new details
+            this.selectedInstallments[index] = { ...updatedInstallment };
+        }).catch((error) => {
+            console.error('Error updating installment:', error);
+        });
+    } else {
+        console.error('Selected student is null. Cannot update installment.');
+    }
+
+    // Turn off editing mode for the installment
+    updatedInstallment.editing = false;
+  }
 
 
+  addNewInstallment() {
+    if (this.selectedInstallments) {
+        this.selectedInstallments.push({
+            date: '',
+            amount: '',
+            dateReceived: '',
+            amountReceived: '',
+            paymentMode: 'ET', // Default to 'ET'
+            note: '',
+            editing: true // Set to true to allow immediate editing
+        });
+    }
+  }
+
+    // Calculate the fee balance based on total fees and received amounts
+  calculateFeeBalance(student: StudentDatabase) {
+    const totalFees = parseFloat(student.totalFees || '0');
+    const totalReceived = student.amountReceived.reduce((sum, amount) => sum + parseFloat(amount || '0'), 0);
+    return (totalFees - totalReceived).toFixed(2); // Keep two decimal places
+  }
 
   back() {
     this.router.navigate(['/login']);
