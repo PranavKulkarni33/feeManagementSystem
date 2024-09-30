@@ -40,6 +40,13 @@ export class DashboardComponent implements OnInit {
   showModal: boolean = false;
   showInstallmentDetailsModal: boolean = false; // New variable for the details modal
   currentEditingIndex: number | null = null;
+  installmentDueDateFilter: string = '';
+  showFilterModal: boolean = false;
+  showStatusFilterModal: boolean = false;
+  showDueDateFilterModal: boolean = false;
+  startDateFilter: string = '';
+  endDateFilter: string = '';
+  showDateRangeFilterModal: boolean = false;
 
   // Including paymentMode and note for each installment
   installmentList: { 
@@ -337,6 +344,94 @@ export class DashboardComponent implements OnInit {
     const totalFees = parseFloat(student.totalFees || '0');
     const totalReceived = student.amountReceived.reduce((sum, amount) => sum + parseFloat(amount || '0'), 0);
     return (totalFees - totalReceived).toFixed(2); // Keep two decimal places
+  }
+
+  filterByInstallmentDueDate() {
+    if (!this.installmentDueDateFilter) {
+        // If no date is selected, reset the filtered list
+        this.filteredStudentList = [...this.studentList];
+    } else {
+        const selectedDate = new Date(this.installmentDueDateFilter);
+        console.log('Selected date for filtering:', selectedDate); // Debugging log
+
+        this.filteredStudentList = this.studentList.filter(student => {
+            // Check if the student has any installments with a due date that matches the selected date
+            return Object.keys(student.datesOfFeesToBePaid).some(dateStr => {
+                const installmentDate = new Date(dateStr);
+                // Validate date and check if it exactly matches the selected date
+                return !isNaN(installmentDate.getTime()) && installmentDate.toDateString() === selectedDate.toDateString();
+            });
+        });
+    }
+  }
+
+  applyDateRangeFilter() {
+    if (!this.startDateFilter || !this.endDateFilter) {
+        // If either date is not set, reset the filtered list
+        this.filteredStudentList = [...this.studentList];
+    } else {
+        const startDate = new Date(this.startDateFilter);
+        const endDate = new Date(this.endDateFilter);
+
+        this.filteredStudentList = this.studentList.filter(student => {
+            // Check if any of the installment dates fall within the specified range
+            return Object.keys(student.datesOfFeesToBePaid).some(dateStr => {
+                const installmentDate = new Date(dateStr);
+                return installmentDate >= startDate && installmentDate <= endDate;
+            });
+        });
+    }
+    this.closeDateRangeFilterModal();
+  }
+
+  // Methods to handle filter modals
+  openFilterModal() {
+      this.showFilterModal = true;
+  }
+
+  closeFilterModal() {
+      this.showFilterModal = false;
+  }
+
+  openStatusFilterModal() {
+      this.closeFilterModal(); // Close main filter modal
+      this.showStatusFilterModal = true;
+  }
+
+  closeStatusFilterModal() {
+      this.showStatusFilterModal = false;
+  }
+
+  openDueDateFilterModal() {
+      this.closeFilterModal(); // Close main filter modal
+      this.showDueDateFilterModal = true;
+  }
+
+  closeDueDateFilterModal() {
+      this.showDueDateFilterModal = false;
+  }
+
+  // Apply status filter
+  applyStatusFilter() {
+      this.closeStatusFilterModal();
+      this.filterStudentsByStatus();
+      this.installmentDueDateFilter = ''; // Reset due date filter
+  }
+
+  // Apply due date filter
+  applyDueDateFilter() {
+      this.closeDueDateFilterModal();
+      this.filterByInstallmentDueDate();
+      this.selectedFilterStatus = 'all'; // Reset status filter
+  }
+
+  openDateRangeFilterModal() {
+    this.showDateRangeFilterModal = true;
+    this.showFilterModal = false; // Close main filter modal
+  }
+
+  closeDateRangeFilterModal() {
+      this.showDateRangeFilterModal = false;
   }
 
   back() {

@@ -2,13 +2,8 @@
     <div class="student-table-wrapper">
         <div class="student-card">
             <div class="student-card-body">
-                <div class="filter-group1">
-                    <label for="statusFilter">Filter by Enrollment Status:</label>
-                    <select id="statusFilter" [(ngModel)]="selectedFilterStatus" (change)="onStatusFilterChange()" class="form-input1">
-                        <option *ngFor="let status of enrollmentStatusesForFilter" [value]="status">{{ status | titlecase }}</option>
-                    </select>
-                </div>
-                <div class="header">
+                <div class="header-with-filter">
+                    <button (click)="openFilterModal()" class="filter-button">Filters</button>
                     <h5 class="title">Student Database</h5>
                 </div>
                 <table class="student-table">
@@ -298,3 +293,64 @@
     </div>
 </div>
 
+<!-- Filter Modal -->
+<div id="filterModal" class="modal" [ngClass]="{'show': showFilterModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Filters</h5>
+            <button type="button" class="close" (click)="closeFilterModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <button class="filter-option-button" (click)="openStatusFilterModal()">Filter by Status</button>
+            <button class="filter-option-button" (click)="openDueDateFilterModal()">Filter by Installment Due Date</button>
+        </div>
+    </div>
+</div>
+
+<!-- Status Filter Modal -->
+<div id="statusFilterModal" class="modal" [ngClass]="{'show': showStatusFilterModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Filter by Status</h5>
+            <button type="button" class="close" (click)="closeStatusFilterModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label for="statusFilter">Select Status:</label>
+            <select id="statusFilter" [(ngModel)]="selectedFilterStatus" class="form-input1" (change)="applyStatusFilter()">
+                <option *ngFor="let status of enrollmentStatusesForFilter" [value]="status">{{ status | titlecase }}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div id="filterModal" class="modal" [ngClass]="{'show': showFilterModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Filters</h5>
+            <button type="button" class="close" (click)="closeFilterModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <button class="filter-option-button" (click)="openStatusFilterModal()">Filter by Status</button>
+            <button class="filter-option-button" (click)="openDueDateFilterModal()">Filter by Installment Due Date</button>
+            <button class="filter-option-button" (click)="openDateRangeFilterModal()">Filter by Installment Date Range</button>
+        </div>
+    </div>
+</div>
+
+<!-- Date Range Filter Modal -->
+<div id="dateRangeFilterModal" class="modal" [ngClass]="{'show': showDateRangeFilterModal}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Filter by Installment Date Range</h5>
+            <button type="button" class="close" (click)="closeDateRangeFilterModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label for="startDateFilter">Start Date:</label>
+            <input type="date" id="startDateFilter" [(ngModel)]="startDateFilter" class="form-input1">
+            <label for="endDateFilter">End Date:</label>
+            <input type="date" id="endDateFilter" [(ngModel)]="endDateFilter" class="form-input1">
+            <button class="filter-apply-button" (click)="applyDateRangeFilter()">Apply</button>
+        </div>
+    </div>
+</div>
