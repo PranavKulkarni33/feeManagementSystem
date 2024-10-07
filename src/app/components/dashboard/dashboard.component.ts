@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit {
   endDateFilter: string = '';
   showDateRangeFilterModal: boolean = false;
   appliedFilter: { type: string, value?: any } | null = null;
+  showAddStudentModal: boolean = false;
 
   // Including paymentMode and note for each installment
   installmentList: { 
@@ -137,6 +138,15 @@ export class DashboardComponent implements OnInit {
       enrollmentStatus: 'enrolled'
     };
     this.installmentList = []; // Reset installment list
+  }
+
+  // Methods for Add Student Modal
+  openAddStudentModal() {
+    this.showAddStudentModal = true;
+  }
+
+  closeAddStudentModal() {
+    this.showAddStudentModal = false;
   }
 
   addStudent() {
