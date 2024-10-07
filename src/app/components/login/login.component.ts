@@ -32,9 +32,7 @@ export class LoginComponent {
     this.password= '';
   }
 
-  goBack(){
-    this.router.navigate(['/landing']);
-  }
+  
 
 
 }
