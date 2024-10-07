@@ -33,15 +33,6 @@ body::before{
     height: 7vw;
 }
 
-/* Centering Container */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    /* background-color: #f4f4f9; */
-   
-}
 
 /* Login Form Wrapper */
 .login-form-wrapper {
