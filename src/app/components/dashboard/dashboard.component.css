@@ -3,8 +3,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    background-color: #f4f4f9;
+<<<<<<< Updated upstream
+    background-color: transparent;
+=======
+    background: transparent;
+>>>>>>> Stashed changes
     width: 100%;
 }
 
@@ -17,7 +20,7 @@
 }
 
 .student-card {
-    background-color: #333;
+    background-color: #716865;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,10 +38,8 @@
 
 .title {
     font-size: 1.8rem;
-    margin-bottom: 20px;
     color: #fff;
     text-align: center;
-    padding-left: 500px;
 }
 
 .title2 {
@@ -53,26 +54,26 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    table-layout: fixed; /* Ensures uniform column widths */
+    table-layout: fixed; 
 }
 
 .student-table th,
 .student-table td {
     padding: 10px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
-    color: white;
-    word-wrap: break-word; /* Allows long text to wrap within the cell */
+    border-bottom: 1px solid #c9c9c9;
+    color: #393433;
+    word-wrap: break-word; 
 }
 
 .student-table th {
-    background-color: #444;
-    color: white;
-    font-weight: bold; 
+    background-color: #AB9F9D;
+    font-weight: 600; 
+    border-bottom: #393433 solid 2px;
 }
 
 .student-table td {
-    background-color: #555; /* Adjusted background color for the table rows */
+    background-color: #f1f1f1; 
 }
 
 /* Responsive Table Overflow */
@@ -85,14 +86,14 @@
     color: #dc3545;
     border: 1px solid #dc3545;
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 8px 12px;
     cursor: pointer;
 }
 
 .view-installments-button {
     background-color: #28a745;
     color: white;
-    padding: 5px 10px;
+    padding: 8px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -366,7 +367,7 @@
 
 
 .edit-input {
-    background-color: #f0f0f0; /* Light grey background */
+    background-color: #BAB4B3; 
     padding: 10px; /* Adds spacing inside the input box */
     border: 1px solid #ccc; /* Light border for the input */
     border-radius: 4px; /* Slightly rounded corners */
@@ -383,7 +384,7 @@
 }
 
 .edit-select {
-    background-color: #f0f0f0; /* Light grey background */
+    background-color: #BAB4B3; 
     padding: 10px; /* Adds spacing inside the select box */
     border: 1px solid #ccc; /* Light border for the select */
     border-radius: 4px; /* Slightly rounded corners */
@@ -404,44 +405,21 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow when focused */
 }
 
-/* Container styling */
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f4f4f9;
-    width: 100%;
-}
 
 /* Header with filter button */
 .header-with-filter {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     width: 100%;
-    padding: 10px 0;
-}
-
-/* Filters button */
-.filter-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.filter-button:hover {
-    background-color: #0056b3;
+    padding: 0.5rem 1rem;
 }
 
 /* Add Student button */
 .addStudent-button {
-    background-color: #e90909;
+    background-color: #BAB4B3;
     color: white;
-    padding: 10px 15px;
+    padding: 0.75rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -452,42 +430,22 @@
     background-color: #bd1f1f;
 }
 
-/* Filter option buttons in modal */
-.filter-option-button {
-    background-color: #28a745;
+/* Add Student Button */
+.filter-button {
+    background-color: #007bff;
     color: white;
-    padding: 10px 15px;
+    padding: 0.75rem;
     border: none;
     border-radius: 4px;
-    margin-bottom: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.filter-option-button:hover {
-    background-color: #218838;
+.filter-button:hover {
+    background-color: #0056b3;
 }
 
-/* Modal styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 40%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal.show {
-    display: block; /* Show when needed */
-}
 
 /* Form input styling for filter selectors */
 .form-input1 {
@@ -558,53 +516,6 @@
     color: #000; /* Black text */
 }
 
-/* Modal styling */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    background-color: #f0f0f0; /* Light grey background */
-    padding: 20px;
-    border-radius: 8px;
-    width: 40%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal.show {
-    display: block; /* Show when needed */
-}
-
-/* Form input styling for modal forms */
-.form-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 16px;
-    background-color: #fff;
-    color: #000;
-}
-
-/* Add Student Button */
-.filter-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-.filter-button:hover {
-    background-color: #0056b3;
-}
 
 /* Add Student Modal specific styling */
 #addStudentModal .modal-content {

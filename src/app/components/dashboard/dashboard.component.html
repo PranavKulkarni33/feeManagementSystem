@@ -1,12 +1,15 @@
 <div class="container">
+    
     <div class="student-table-wrapper">
         <div class="student-card">
             <div class="student-card-body">
+
                 <div class="header-with-filter">
                     <button (click)="openFilterModal()" class="filter-button">Filters</button>
                     <h5 class="title">Student Database</h5>
                     <button (click)="openAddStudentModal()" class="addStudent-button">Add Student</button>
                 </div>
+
                 <!-- Display applied filter and make it editable -->
                 <div *ngIf="appliedFilter" class="applied-filter-container">
                     <div *ngIf="appliedFilter.type === 'status'" class="applied-filter">
@@ -89,18 +92,22 @@
                                 <input *ngIf="student.editing" type="text" class="edit-input" [(ngModel)]="student.notes">
                             </td>
                             <td>
-                                <button class="view-installments-button" (click)="openInstallmentModalForStudent(student)">View Installments</button>
+                                <button class="view-installments-button" (click)="openInstallmentModalForStudent(student)">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
                             </td>
                             <td>
                                 <button *ngIf="!student.editing" class="edit-button" (click)="editStudent(student)">
-                                    Edit
+                                    <i class="fa-solid fa-user-pen"></i>
                                 </button>
                                 <button *ngIf="student.editing" class="save-button" (click)="updateStudent(student, i)">
                                     Save
                                 </button>
                             </td>
                             <td>
-                                <button class="delete-button3" (click)="deleteStudent(student)">Delete</button>
+                                <button class="delete-button3" (click)="deleteStudent(student)">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
