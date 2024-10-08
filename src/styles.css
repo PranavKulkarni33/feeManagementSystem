@@ -2,13 +2,10 @@ html, body {
     height: 100%;
     margin: 0;
 }
-<<<<<<< Updated upstream
-=======
 
 body {
     position: relative;
 }
->>>>>>> Stashed changes
 
 body::before{
     content: '';
