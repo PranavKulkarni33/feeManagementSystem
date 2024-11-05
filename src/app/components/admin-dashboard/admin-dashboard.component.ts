@@ -1,16 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentDatabase } from 'src/app/interfaces/student-database';
 import { AuthService } from 'src/app/services/auth.service';
 import { StudentDatabaseServiceService } from 'src/app/services/student-database-service.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
+
+import { TDocumentDefinitions } from 'pdfmake/interfaces';
+
+
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-admin-dashboard',
+  templateUrl: './admin-dashboard.component.html',
+  styleUrls: ['./admin-dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
-
+export class AdminDashboardComponent {
   studentList: StudentDatabase[] = [];
   studentObj: StudentDatabase = {
     id: '',
@@ -50,6 +56,9 @@ export class DashboardComponent implements OnInit {
   showDateRangeFilterModal: boolean = false;
   appliedFilter: { type: string, value?: any } | null = null;
   showAddStudentModal: boolean = false;
+  logoBase64: string = ''; 
+  
+
 
   // Including paymentMode and note for each installment
   installmentList: { 
@@ -59,6 +68,7 @@ export class DashboardComponent implements OnInit {
     amountReceived: string,
     paymentMode: string,
     note: string,
+    raises: string
     
   }[] = [];
   
@@ -69,6 +79,7 @@ export class DashboardComponent implements OnInit {
     amountReceived: string,
     paymentMode: string,
     note: string,
+    raises: string
     editing: boolean
   }[] = [];
 
@@ -126,20 +137,20 @@ export class DashboardComponent implements OnInit {
       startDate: '',
       endDate: '',
       totalFees: '',
-      datesOfFeesToBePaid: {}, // Reset to empty map
-      dateOfPaymentReceived: [], // Reset to empty array
+      datesOfFeesToBePaid: {},
+      dateOfPaymentReceived: [],
       etNumber: '',
       amountReceived: [],
-      paymentModes: [], // Reset to empty array
-      installmentNotes: [], // Reset to empty array
+      paymentModes: [],
+      installmentNotes: [],
       modeOfPayment: '',
       confirmedByVM: '',
-      totalFeeBalance: '', // Reset fee balance
+      totalFeeBalance: '',
       notes: '',
       enrollmentStatus: 'enrolled',
       raises: []
     };
-    this.installmentList = []; // Reset installment list
+    this.installmentList = [];
   }
 
   // Methods for Add Student Modal
@@ -202,15 +213,16 @@ export class DashboardComponent implements OnInit {
     this.selectedStudent = student;
 
     this.selectedInstallments = Object.keys(student.datesOfFeesToBePaid || {}).map((date, index) => {
-        return {
-            date: date,
-            amount: student.datesOfFeesToBePaid[date],
-            dateReceived: student.dateOfPaymentReceived?.[index] || 'Not Received',
-            amountReceived: student.amountReceived?.[index] || 'Not Received',
-            paymentMode: student.paymentModes?.[index] || 'ET', // Default to ET if not available
-            note: student.installmentNotes?.[index] || '', // Default to empty string if no note
-            editing: false
-        };
+      return {
+        date: date,
+        amount: student.datesOfFeesToBePaid[date],
+        dateReceived: student.dateOfPaymentReceived?.[index] || 'Not Received',
+        amountReceived: student.amountReceived?.[index] || 'Not Received',
+        paymentMode: student.paymentModes?.[index] || 'ET',
+        note: student.installmentNotes?.[index] || '',
+        raises: student.raises[index] || 'Not Raised',
+        editing: false
+      };
     });
 
     this.showInstallmentDetailsModal = true;
@@ -218,7 +230,7 @@ export class DashboardComponent implements OnInit {
 
   closeInstallmentDetailsModal() {
     this.showInstallmentDetailsModal = false;
-    this.selectedInstallments = []; // Clear selected installments
+    this.selectedInstallments = [];
     this.selectedStudent = null;
   }
 
@@ -233,12 +245,13 @@ export class DashboardComponent implements OnInit {
 
   addInstallment() {
     this.installmentList.push({
-        date: '',
-        amount: '',
-        dateReceived: '',
-        amountReceived: '',
-        paymentMode: 'ET', // Default to ET
-        note: '' // Empty note by default
+      date: '',
+      amount: '',
+      dateReceived: '',
+      amountReceived: '',
+      paymentMode: 'ET',
+      note: '',
+      raises: ''
     });
   }
 
@@ -248,20 +261,20 @@ export class DashboardComponent implements OnInit {
 
   saveInstallments() {
     this.studentObj.datesOfFeesToBePaid = this.installmentList.reduce((map: { [key: string]: string }, installment) => {
-        map[installment.date] = installment.amount; // Map each date to the corresponding amount to be paid
-        return map;
+      map[installment.date] = installment.amount;
+      return map;
     }, {});
 
     this.studentObj.dateOfPaymentReceived = this.installmentList.map(installment => installment.dateReceived).filter(date => date);
-    this.studentObj.amountReceived = this.installmentList.map(installment => installment.amountReceived).filter(amount => amount); // Save received amounts
-    this.studentObj.paymentModes = this.installmentList.map(installment => installment.paymentMode); // Save payment modes
-    this.studentObj.installmentNotes = this.installmentList.map(installment => installment.note); // Save notes
+    this.studentObj.amountReceived = this.installmentList.map(installment => installment.amountReceived).filter(amount => amount);
+    this.studentObj.paymentModes = this.installmentList.map(installment => installment.paymentMode);
+    this.studentObj.installmentNotes = this.installmentList.map(installment => installment.note);
+    this.studentObj.raises = this.installmentList.map(installment => installment.raises); // Store raises as an array
 
-    // Calculate and update the total fee balance
     this.studentObj.totalFeeBalance = this.calculateFeeBalance(this.studentObj);
 
     this.closeInstallmentModal();
-}
+  }
 
 
   editStudent(student: StudentDatabase) {
@@ -311,32 +324,40 @@ export class DashboardComponent implements OnInit {
 
   // Update the installment details and save to the database
   updateInstallment(updatedInstallment: any, index: number) {
-    // Ensure selectedStudent is not null before proceeding
+    // Check if date and amount are provided
+    if (!updatedInstallment.date || !updatedInstallment.amount) {
+      alert("Please fill in both the Date and Amount fields before saving the installment.");
+      return; // Stop further execution if validation fails
+    }
+
     if (this.selectedStudent) {
-        // Update the student object with the new installment details
-        this.selectedStudent.datesOfFeesToBePaid[updatedInstallment.date] = updatedInstallment.amount;
-        this.selectedStudent.dateOfPaymentReceived[index] = updatedInstallment.dateReceived;
-        this.selectedStudent.amountReceived[index] = updatedInstallment.amountReceived;
-        this.selectedStudent.paymentModes[index] = updatedInstallment.paymentMode;
-        this.selectedStudent.installmentNotes[index] = updatedInstallment.note;
+      // Update the student object with the new installment details
+      this.selectedStudent.datesOfFeesToBePaid[updatedInstallment.date] = updatedInstallment.amount;
+      this.selectedStudent.dateOfPaymentReceived[index] = updatedInstallment.dateReceived;
+      this.selectedStudent.amountReceived[index] = updatedInstallment.amountReceived;
+      this.selectedStudent.paymentModes[index] = updatedInstallment.paymentMode;
+      this.selectedStudent.installmentNotes[index] = updatedInstallment.note;
+      this.selectedStudent.raises[index] = updatedInstallment.raises; // Update raises at the specific index
 
-        // Calculate and update the total fee balance
-        this.selectedStudent.totalFeeBalance = this.calculateFeeBalance(this.selectedStudent);
+      // Calculate and update the total fee balance
+      this.selectedStudent.totalFeeBalance = this.calculateFeeBalance(this.selectedStudent);
 
-        // Call the service method to update the student in the database
-        this.studentService.updateInstallment(this.selectedStudent).then(() => {
-            // Update the installment list with the new details
-            this.selectedInstallments[index] = { ...updatedInstallment };
-        }).catch((error) => {
-            console.error('Error updating installment:', error);
-        });
+      // Call the service method to update the student in the database
+      this.studentService.updateInstallment(this.selectedStudent).then(() => {
+        // Update the installment list with the new details
+        this.selectedInstallments[index] = { ...updatedInstallment };
+      }).catch((error) => {
+        console.error('Error updating installment:', error);
+      });
     } else {
-        console.error('Selected student is null. Cannot update installment.');
+      console.error('Selected student is null. Cannot update installment.');
     }
 
     // Turn off editing mode for the installment
     updatedInstallment.editing = false;
   }
+
+
 
 
   addNewInstallment() {
@@ -348,6 +369,7 @@ export class DashboardComponent implements OnInit {
             amountReceived: '',
             paymentMode: 'ET', // Default to 'ET'
             note: '',
+            raises: '',
             editing: true // Set to true to allow immediate editing
         });
     }
@@ -469,4 +491,81 @@ export class DashboardComponent implements OnInit {
   back() {
     this.router.navigate(['/login']);
   }
+
+  logout() {
+    this.auth.logout();
+  }
+
+  generatePDF() {
+    const doc = new jsPDF();
+    const logoUrl = 'assets/images/a1-logo.png';
+
+    const img = new Image();
+    img.src = logoUrl;
+    img.onload = () => {
+        const currentDate = new Date();
+        const month = currentDate.toLocaleString('default', { month: 'long' });
+        
+        this.studentList.forEach((student, index) => {
+            if (index > 0) {
+                doc.addPage(); // Start a new page for each student after the first
+            }
+
+            // Add the logo
+            doc.addImage(img, 'PNG', 10, 10, 30, 30);
+
+            // Title with month, centered
+            doc.setFontSize(18);
+            doc.text(`Student Fee Report (${month})`, doc.internal.pageSize.getWidth() / 2, 25, { align: "center" });
+
+            // Date below the title
+            doc.setFontSize(12);
+            doc.text(`Date: ${currentDate.toLocaleDateString()}`, doc.internal.pageSize.getWidth() / 2, 35, { align: "center" });
+
+            // Add space and a horizontal line
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.5);
+            doc.line(10, 40, doc.internal.pageSize.getWidth() - 10, 40);
+
+            let startY = 50;
+
+            // Student details
+            doc.setFontSize(14);
+            doc.text(`Name: ${student.name}`, 14, startY);
+            doc.text(`Program: ${student.program}`, 14, startY + 8);
+            doc.text(`Total Fee: ${student.totalFees}`, 14, startY + 16);
+
+            // Installment details
+            const installmentData = Object.keys(student.datesOfFeesToBePaid).map((date, idx) => [
+                date,
+                student.datesOfFeesToBePaid[date] || 'N/A',
+                student.dateOfPaymentReceived?.[idx] || 'N/A',
+                student.amountReceived?.[idx] || 'N/A',
+                student.raises?.[idx] || 'N/A'
+            ]);
+
+            // Render table for installments
+            (doc as any).autoTable({
+                startY: startY + 24,
+                head: [["Installment Date", "Amount Due", "Date Received", "Amount Received", "Date Raised"]],
+                body: installmentData,
+                theme: "grid",
+            });
+
+            // Signature line with "Mr. Pankaj" at the bottom right
+            const pageHeight = doc.internal.pageSize.getHeight();
+            doc.setFontSize(12);
+            doc.text("Mr. Pankaj", doc.internal.pageSize.getWidth() - 30, pageHeight - 20, { align: "right" });
+        });
+
+        // Open PDF in a new tab
+        window.open(doc.output('bloburl'), '_blank');
+    };
+
+    img.onerror = () => {
+        console.error("Failed to load the logo image.");
+    };
+}
+
+
 }

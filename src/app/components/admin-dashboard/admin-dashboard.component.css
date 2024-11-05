@@ -1,0 +1,536 @@
+/* Container to center content */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    width: 100%;
+}
+
+/* Student Table Wrapper */
+.student-table-wrapper {
+    width: 100%;
+    max-width: 1400px; /* Increased the width for better alignment */
+    margin-bottom: 30px;
+    overflow-x: auto; /* Ensures horizontal scrolling if content overflows */
+}
+
+.student-card {
+    background-color: #716865;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding and width calculation don't break the layout */
+}
+
+.student-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.title {
+    font-size: 1.8rem;
+    color: #fff;
+    text-align: center;
+}
+
+.title2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: black;
+    text-align: center;
+}
+
+/* Student Table Styling */
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed; 
+}
+
+.student-table th,
+.student-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #c9c9c9;
+    color: #393433;
+    word-wrap: break-word; 
+}
+
+.student-table th {
+    background-color: #AB9F9D;
+    font-weight: 600; 
+    border-bottom: #393433 solid 2px;
+}
+
+.student-table td {
+    background-color: #f1f1f1; 
+}
+
+/* Responsive Table Overflow */
+.student-table-wrapper {
+    overflow-x: auto;
+}
+
+.delete-button1 {
+    background-color: transparent;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.view-installments-button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.view-installments-button:hover {
+    background-color: #218838;
+}
+
+.back-button1 {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-button1:hover {
+    background-color: #c82333;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.add-button1 {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-button1:hover {
+    background-color: #218838;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Keep it hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* High z-index for modal */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for better visibility */
+}
+
+.modal.show {
+    display: block; /* Show the modal when needed */
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-header h5 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.modal-header .close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-footer button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-button3 {
+    background-color: #dc3545; /* Red background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.delete-button3:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.modal-footer button:hover {
+    background-color: #0056b3;
+}
+
+/* Installment Table Styles */
+.installment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Adds space between the table and the modal header */
+}
+
+.installment-table th,
+.installment-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    word-wrap: break-word; /* Ensures long text breaks in table cells */
+}
+
+.installment-table th {
+    background-color: #f4f4f9; /* Light background for headers */
+    color: #333; /* Dark text for headers */
+}
+
+/* Style for input fields in the installment table */
+.installment-table input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Make inputs take the full width of the cell */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+/* Button styles in the installment table */
+.installment-table button {
+    background-color: #dc3545; /* Red color for remove button */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Hover state for buttons */
+.installment-table button:hover {
+    background-color: #c82333;
+}
+
+/* Button styles in the form */
+.add-button,
+.back-button,
+.delete-button,
+.remove-button,
+.save-button {
+    background-color: #007bff; /* Blue color for general action buttons */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px; /* Adds space above buttons */
+}
+
+.add-button:hover,
+.back-button:hover,
+.delete-button:hover,
+.remove-button:hover,
+.save-button:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+/* Ensure modal background is not transparent */
+.modal-content {
+    pointer-events: auto; /* Ensure modal content can receive pointer events */
+}
+
+.delete-button3 {
+    background-color: #dc3545; /* Red background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.delete-button3:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.filter-group1 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.filter-group1 label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.form-input1 {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Green Edit button */
+.edit-button {
+    background-color: #28a745; /* Green background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.edit-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Blue Save button */
+.save-button {
+    background-color: #007bff; /* Blue background color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 12px; /* Button padding */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.save-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.edit-input {
+    background-color: #BAB4B3; 
+    padding: 10px; /* Adds spacing inside the input box */
+    border: 1px solid #ccc; /* Light border for the input */
+    border-radius: 4px; /* Slightly rounded corners */
+    width: 100%; /* Ensures input takes full width of the table cell */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    font-size: 16px; /* Ensures readable font size */
+    color: #333; /* Dark text color for better readability */
+}
+
+.edit-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Removes the default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Adds subtle shadow when focused */
+}
+
+.edit-select {
+    background-color: #BAB4B3; 
+    padding: 10px; /* Adds spacing inside the select box */
+    border: 1px solid #ccc; /* Light border for the select */
+    border-radius: 4px; /* Slightly rounded corners */
+    width: 100%; /* Ensures select takes full width of the table cell */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    font-size: 16px; /* Ensures readable font size */
+    color: #333; /* Dark text color for better readability */
+    appearance: none; /* Removes the default arrow for a custom look */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="#333" d="M2 0L0 2h4z"/></svg>'); /* Custom dropdown arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Positions custom arrow */
+    background-size: 10px; /* Size of custom arrow */
+}
+
+.edit-select:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none; /* Removes default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow when focused */
+}
+
+
+/* Header with filter button */
+.header-with-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 1rem;
+}
+
+/* Add Student button */
+.addStudent-button {
+    background-color: #bd1f1f;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.addStudent-button:hover {
+    background-color: #fd0101e8;
+}
+
+.generate-report-button{
+    background-color: #007bff;;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.generate-report-button:hover {
+    background-color: #1302fa;
+}
+
+/* Add Student Button */
+.filter-button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+    background-color: #0056b3;
+}
+
+
+/* Form input styling for filter selectors */
+.form-input1 {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 16px;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #000; /* Black text */
+}
+
+/* Filter Apply Button */
+.filter-apply-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.filter-apply-button:hover {
+    background-color: #0056b3;
+}
+
+/* Date range filter modal styling */
+#dateRangeFilterModal .modal-content {
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Applied filter container */
+.applied-filter-container {
+    background-color: #f4f4f9;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Applied filter styling */
+.applied-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.applied-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #000; /* Black text */
+}
+
+.form-input1 {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 10px;
+    background-color: #f0f0f0; /* Light grey background */
+    color: #000; /* Black text */
+}
+
+
+/* Add Student Modal specific styling */
+#addStudentModal .modal-content {
+    width: 80%;
+    max-width: 500px;
+    padding: 20px;
+}
+

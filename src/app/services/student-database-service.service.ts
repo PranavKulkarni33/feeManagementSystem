@@ -82,4 +82,23 @@ export class StudentDatabaseServiceService {
       });
 }
 
+  // Add a raise to a specific installment
+  addRaise(studentId: string, installmentId: string, raise: { amount: string, reason: string }) {
+    const raiseId = this.afs.createId();
+    return this.afs
+      .collection(`/StudentDatabase/${studentId}/Installments/${installmentId}/Raises`)
+      .doc(raiseId)
+      .set({ id: raiseId, ...raise });
+  }
+
+  // Get all raises for a specific installment
+  getRaises(studentId: string, installmentId: string) {
+    return this.afs.collection(`/StudentDatabase/${studentId}/Installments/${installmentId}/Raises`).snapshotChanges();
+  }
+
+  // Delete a specific raise
+  deleteRaise(studentId: string, installmentId: string, raiseId: string) {
+    return this.afs.doc(`/StudentDatabase/${studentId}/Installments/${installmentId}/Raises/${raiseId}`).delete();
+  }
+
 }

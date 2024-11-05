@@ -19,5 +19,6 @@ export interface StudentDatabase {
     enrollmentStatus: string; // New field for enrollment status
     notes: string; // Notes for student
     editing?: boolean;
+    raises: string[];
 }
 
